@@ -14,18 +14,16 @@ function read_file($filename)
 		    	{
 		    		$facts = str_split(explode(" #", $line)[0]);
 		    		array_shift($facts);
-
 		    	}
 		    	else if ($line[0] == '?')
 		    	{
-		    		printf("test");
 		    		$queries = str_split(explode(" #", $line)[0]);
 		    		array_shift($queries);
 		    	}
 		    	else
 		    	{
-					$rules = explode(" #", $line);
-					$lines[$i] = $rules[0];
+					$rules = explode(" #", $line)[0];
+					$lines[$i] = $rules;
 					$i++;
 				}
 			}
@@ -34,10 +32,9 @@ function read_file($filename)
 	}
 	else
 		echo "Error reading file: ".$filename.PHP_EOL;
-	var_dump($facts);
-	var_dump($queries);
-	var_dump($lines);
-		return ($lines);
+		$data = array('rules' => $lines, 'facts' => $facts, 'queries' => $queries, );
+		return ($data);
 }
-$lines = read_file($argv[1]);
+$data = read_file($argv[1]);
+var_dump($data);
 ?>
