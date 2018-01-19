@@ -1,0 +1,22 @@
+# This is a comment$
+# all the required rules and symbols, along with the bonus ones, will be
+# shown here. spacing is not important
+
+#MIX_MOD
+
+!(A | B) + !C + (D | E) => X
+!A | B | E => Y
+!(A + D) | (A + D) | X | Y => Z
+!Z | (!X + Y) => !(Q + U)
+(!X + Y) | Q | (U + Z) | D => P
+!B + D => !S
+B ^ !D => O
+A + (B + (X ^ Y ^ Z ^ P)) => T
+(X ^ Y) ^ (Z ^ P) => K
+(X ^ !C) + Z => W + !V
+B + (A ^ C) => N
+(A ^ B ^ C ^ D) + E => !R
+
+=AC
+
+?XYZQUPSOKWVNRT

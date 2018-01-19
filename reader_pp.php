@@ -127,7 +127,6 @@ function expand_rules($rls)
 
 function grouper($str)
 {
-	if ($verbose === true) {echo "In GROUPER str: ".$str.PHP_EOL;}
 	$ex_num = 0;
 	$br_num = 0;
 	$op_num = 0;
@@ -137,19 +136,15 @@ function grouper($str)
 	$or = false;
 	$xor = false;
 	$br_overide = false;
-	$groups;
 	for ($i = 0; $i < iconv_strlen($str); $i++)
 	{
-		if ($verbose === true)
-		{
-			echo "Index: ".$i.PHP_EOL;
-			echo "Char: ".$str[$i].PHP_EOL;	
-		}
+		echo "Index: ".$i.PHP_EOL;
+		echo "Char: ".$str[$i].PHP_EOL;
 		if ($str[$i] == '!')
 		{
 			if ($ex == false)
 			{
-				if ($verbose === true) {echo "Ex Found, now TRUE".PHP_EOL;}
+				echo "Ex now TRUE".PHP_EOL;
 				$ex = true;
 				$ex_index[] = $i;
 				$ex_br_num[] = $br_num;
@@ -162,30 +157,24 @@ function grouper($str)
 			if ($ex == true && $ex_index[$ex_num -1] == $i -1)
 			{
 				$br_overide = true;
-				if ($verbose === true) {echo "br_overide now TRUE".PHP_EOL;}
+				echo "br_overide now TRUE".PHP_EOL;
 			}
 			//wait for another ')' before switching back overide state & switch overide to false
 			if ($br_overide == true && $ex_index[$ex_num -1] != $i -1)
 			{
 				$br_overide = false;
+				echo "br_overide now FALSE".PHP_EOL;
 				$br_waiter++;
 				$ex_waiting[] = $i;
-				if ($verbose === true)
-				{
-					echo "br_overide now FALSE".PHP_EOL;
-					echo "br_waiter++: ".$br_waiter.PHP_EOL;
-				}
+				echo "br_waiter++: ".$br_waiter.PHP_EOL;
 			}
 			//wait for another ')' before switching back overide state
 			else if ($br_waiter > 0)
 			{
 				$br_waiter++;
 				$ex_waiting[] = $i;
-				if ($verbose === true)
-				{
-					echo "br_waiter++: ".$br_waiter.PHP_EOL;
-					var_dump($ex_waiting);
-				}
+				echo "br_waiter++: ".$br_waiter.PHP_EOL;
+				var_dump($ex_waiting);
 			}
 			//wait for another ')' before switching back or state
 			if ($or == true)
@@ -193,11 +182,8 @@ function grouper($str)
 				$or_waiter++;
 				$or_waiting[] = $i;
 				$or = false;
-				if ($verbose === true)
-				{
-					echo "or_waiter++: ".$or_waiter.PHP_EOL;
-					var_dump($or_waiting);
-				}
+				echo "or_waiter++: ".$or_waiter.PHP_EOL;
+				var_dump($or_waiting);
 			}
 			//wait for another ')' before switching back xor state
 			if ($xor == true)
@@ -205,11 +191,8 @@ function grouper($str)
 				$xor_waiter++;
 				$xor_waiting[] = $i;
 				$xor = false;
-				if ($verbose === true)
-				{
-					echo "xor_waiter++: ".$xor_waiter.PHP_EOL;
-					var_dump($xor_waiting);
-				}
+				echo "xor_waiter++: ".$xor_waiter.PHP_EOL;
+				var_dump($xor_waiting);
 			}
 			$br_index[] = $i;
 			$br_ex[] = $ex;
@@ -220,7 +203,7 @@ function grouper($str)
 			$br_num--;
 			$or = false;
 			$xor = false;
-			if ($verbose === true) {echo "br_overide: ".$br_overide.PHP_EOL;}
+			echo "br_overide: ".$br_overide.PHP_EOL;
 			//Check for '!' and create group
 			if ($br_overide == false)
 				$groups[] = [$br_index[$br_num], $i];
@@ -230,7 +213,7 @@ function grouper($str)
 			if ($br_index[$br_num] == $ex_waiting[$br_waiter -1])
 			{
 				$br_overide = true;
-				if ($verbose === true) {echo "br_overide now TRUE".PHP_EOL;}
+				echo "br_overide now TRUE".PHP_EOL;
 				$br_waiter--;
 				unset($ex_waiting[$br_waiter]);
 				$ex_waiting = array_values($ex_waiting);
@@ -238,7 +221,7 @@ function grouper($str)
 			if ($br_index[$br_num] == $or_waiting[$or_waiter -1])
 			{
 				$or = true;
-				if ($verbose === true) {echo "OR now TRUE".PHP_EOL;}
+				echo "OR now TRUE".PHP_EOL;
 				$or_waiter--;
 				unset($or_waiting[$or_waiter]);
 				$or_waiting = array_values($or_waiting);
@@ -246,7 +229,7 @@ function grouper($str)
 			if ($br_index[$br_num] == $xor_waiting[$xor_waiter -1])
 			{
 				$xor = true;
-				if ($verbose === true) {echo "XOR now TRUE".PHP_EOL;}
+				echo "XOR now TRUE".PHP_EOL;
 				$xor_waiter--;
 				unset($xor_waiting[$xor_waiter]);
 				$xor_waiting = array_values($xor_waiting);
@@ -270,16 +253,14 @@ function grouper($str)
 					$k--;
 				}
 			}
-			if ($verbose === true)
-			{
-				echo "PRE ')' char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
-				var_dump($char_br_num);
-			}
+			echo "PRE ')' char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
+			var_dump($char_br_num);
 			for ($k = 0; $k < count($char_br_num); $k++)
 			{
-				if ($verbose === true) {echo "k is: ".$k." and less than: ".count($char_br_num).PHP_EOL;}
+				echo "k is: ".$k." and less than: ".count($char_br_num).PHP_EOL;
 				if ($char_br_num[$k] == $br_num + 1)
 				{
+					echo "removing char elems at k = ".$k.PHP_EOL;
 					unset($char_br_num[$k]);
 					$char_br_num = array_values($char_br_num);
 					unset($char_index[$k]);
@@ -287,12 +268,8 @@ function grouper($str)
 					unset($char_ex[$k]);
 					$char_ex = array_values($char_ex);
 					$char_num--;
-					if ($verbose === true)
-					{
-						echo "removing char elems at k = ".$k.PHP_EOL;
-						echo "POST ')' char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
-						var_dump($char_br_num);
-					}
+					echo "POST ')' char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
+					var_dump($char_br_num);
 					$k--;
 				}
 			}
@@ -308,11 +285,8 @@ function grouper($str)
 					$k--;
 				}
 			}
-			if ($verbose === true)
-			{
-				echo "var_dump".PHP_EOL;
-				var_dump($groups);
-			}
+			echo "var_dump".PHP_EOL;
+			var_dump($groups);
 		}
 		else if ($str[$i] == '|')
 		{
@@ -333,15 +307,11 @@ function grouper($str)
 		else if (ctype_alpha($str[$i]))
 		{
 			$prev_char_num = $char_num -1;
-			if ($char_num > 0 && $op_num > 0 && $char_br_num[$prev_char_num] == $br_num && $str[$i + 1] != ")")
+			if ($char_num > 0 && $op_num > 0 && $char_br_num[$prev_char_num] == $br_num && $str[$i + 1] != ")" && $or == false)
 			{
-				if ($verbose === true)
-				{
-					echo "Check for '!' at ".$prev_char_num." and br_overide: ".$br_overide." then create group".PHP_EOL;
-					var_dump($char_ex);
-					var_dump($char_index);
-				}
-				//Create group according to state of ex and br_overide
+				echo "Check for '!' at ".$prev_char_num." and br_overide: ".$br_overide." then create group".PHP_EOL;
+				var_dump($char_ex);
+				var_dump($char_index);
 				if ($char_ex[$prev_char_num] == false && $ex == false)
 					$groups[] = [$char_index[$prev_char_num], $i];
 				else if ($char_ex[$prev_char_num] == false && $ex == true)
@@ -350,11 +320,8 @@ function grouper($str)
 					$groups[] = [$char_index[$prev_char_num] -1, $i];
 				else if ($char_ex[$prev_char_num] == true && $br_overide == true)
 					$groups[] = [$char_index[$prev_char_num] -2, $i];
-				if ($verbose === true)
-				{
-					echo "PRE char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
-					var_dump($char_br_num);
-				}
+				echo "PRE char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
+				var_dump($char_br_num);
 				for ($k = 0; $k < count($op_br_num); $k++)
 				{
 					if ($op_br_num[$k] == $br_num)
@@ -373,6 +340,7 @@ function grouper($str)
 				{
 					if ($char_br_num[$k] == $br_num)
 					{
+						echo "removing char elems at k = ".$k.PHP_EOL;
 						unset($char_br_num[$k]);
 						$char_br_num = array_values($char_br_num);
 						unset($char_index[$k]);
@@ -380,12 +348,8 @@ function grouper($str)
 						unset($char_ex[$k]);
 						$char_ex = array_values($char_ex);
 						$char_num--;
-						if ($verbose === true)
-						{
-							echo "removing char elems at k = ".$k.PHP_EOL;
-							echo "POST char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
-							var_dump($char_br_num);
-						}
+						echo "POST char elem removal char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
+						var_dump($char_br_num);
 						$k--;
 					}
 				}
@@ -401,21 +365,18 @@ function grouper($str)
 						$k--;
 					}
 				}
-				if ($verbose === true)
-				{
-					echo "var_dump".PHP_EOL;
-					var_dump($groups);
-				}
+				echo "var_dump".PHP_EOL;
+				var_dump($groups);
 			}
 			else
 			{
-				if ($verbose === true) {echo "Does not meet the conditions for group".PHP_EOL;}
+				echo "Does not meet the conditions for group".PHP_EOL;
 				$char_num++;
 				$char_index[] = $i;
 				$char_ex[] = $ex;
 				$char_br_num[] = $br_num;
 			}
-			if ($char_num > 0 && $verbose === true)
+			if ($char_num > 0)
 			{
 				echo "char_num ".$char_num." br_num: ".$br_num.PHP_EOL;
 				var_dump($char_br_num);
@@ -426,8 +387,9 @@ function grouper($str)
 			if ($ex_index[$ex_num -1] != $i)
 			{
 				$ex = false;
-				if ($verbose === true) {echo "Ex now FALSE".PHP_EOL;}
+				echo "Ex now FALSE".PHP_EOL;
 			}
+
 		}
 	}
 	if (iconv_strlen($str) != 1)
@@ -445,17 +407,14 @@ function grouper($str)
 					$in[] = $k;
 			}
 		}
-		if ($verbose === true)
-		{
-			echo "chars in: ".PHP_EOL;
-			var_dump($in);
-		}
+		echo "chars in: ".PHP_EOL;
+		var_dump($in);
 		for ($k = 0; $k < iconv_strlen($str); $k++)
 		{
 			if ($in && array_search($k, $in) == false)
 			{
 				$groups[] = [0, iconv_strlen($str)];
-				if ($verbose === true) {echo "Added whole group".PHP_EOL;}
+				echo "Added whole group".PHP_EOL;
 				break;
 			}
 		}
@@ -463,276 +422,281 @@ function grouper($str)
 	else
 	{
 		$groups[] = [0, iconv_strlen($str)];
-		if ($verbose === true) {echo "Added whole group".PHP_EOL;}
+		echo "Added whole group".PHP_EOL;
 	}
-	if ($verbose === true)
-	{
-		echo "str:".$str.PHP_EOL."END GROUPER Groups:".PHP_EOL;
-		var_dump($groups);
-	}
-	if ($verbose === true) {echo "End GROUPER".PHP_EOL;}
+	echo "str:".$str.PHP_EOL."END GROUPER Groups:".PHP_EOL;
+	var_dump($groups);
 	return $groups;
 }
 
-function expander($options, $group, $group_num)
+function expander($options, $group, $group_num, $rplcd)
 {
 	$or = false;
 	$xor = false;
-	$verbose = true;
-	if ($verbose === true) {echo "In EXPANDER".PHP_EOL."Group ".$group_num." is :".$group.PHP_EOL;}
+	echo "IN EXPANDER".PHP_EOL."Group ".$group_num." is :".$group.PHP_EOL;
+	//Create reps array containing index's of replaced chars
+	if($rplcd != false)
+	{
+		echo "rplcd != false".PHP_EOL;
+		var_dump($rplcd);
+		foreach ($rplcd as $rep)
+		{
+			for ($l = $rep[1]; $l <= $rep[2]; $l++)
+				$reps[] = $l;
+		}
+	}
+	else
+		$reps = [];
 	//Go through current group looking for |, ^ and counting chars
 	for ($i = 0; $i <= iconv_strlen($group); $i++)
 	{
 		if ($group[$i] == "|")
 		{
-			$or = true;
-			$pos = $i;
+			echo "Found OR".PHP_EOL;
+			if ($or || $xor)
+				echo "Error processing group: ".$group.PHP_EOL;
+			else
+			{
+				$or = true;
+				$pos = $i;
+				echo "OR true".PHP_EOL;
+			}
 		}
 		else if ($group[$i] == "^")
 		{
-			$xor = true;
-			$pos = $i;
+			echo "Found XOR".PHP_EOL;
+			if ($or || $xor)
+				echo "Error processing group: ".$group.PHP_EOL;
+			else
+			{
+				$xor = true;
+				$pos = $i;
+				echo "XOR true".PHP_EOL;
+			}
 		}
 		else if (ctype_alpha($group[$i]))
 		{
-			if ($group[$i-1] == "!")
-				$chars[] = ["!".$group[$i], $group[$i]];
-			else
-				$chars[] = [$group[$i], "!".$group[$i]];
+			$chars[] = $i;
 		}
 	}
-	//For each char, copy each element currently in the array and add a true and false copy
-	for ($i=0; $i<count($chars); $i++)
+	//Go though group again, tracking state of each letter and adding it to half1 or half2
+	$ex = false;
+	$overide = false;
+	echo "Pre half construction pos: ".$pos.PHP_EOL;
+	for ($k = 0; $k < iconv_strlen($group); $k++)
 	{
-		if ($g_opts)
+		if ($k == $pos)
 		{
-			if ($verbose === true) {echo "Expanding i=".$i."\n";}
-			foreach ($g_opts as $g_opt)
+			$half1t .= "+";
+			$half1f .= "+";
+		}
+		if ($k < $pos && $group[$k] != "!" && $group[$k] != "(" && $group[$k] != ")")
+		{
+			if ($group[$k] == " " || $group[$k] == "+" || array_search($k, $reps))
 			{
-				$ng_opts[] = $g_opt." + ".$chars[$i][0];
-				$ng_opts[] = $g_opt." + ".$chars[$i][1];
-				if ($verbose === true) {var_dump($ng_opts);}
+				$half1t .= $group[$k];
+				$half1f .= $group[$k];
 			}
-			$g_opts = $ng_opts;
-			unset($ng_opts);
+			else if (ctype_alpha($group[$k]))
+			{
+				if ($ex == false && $overide == false)
+				{
+					$half1t .= $group[$k];
+					$half1f .= "!".$group[$k];
+				}
+				else
+				{
+					$half1t .= "!".$group[$k];
+					$half1f .= $group[$k];
+				}
+			}
 		}
-		else
+		else if ($k > $pos && $group[$k] != "!" && $group[$k] != "(" && $group[$k] != ")")
 		{
-			$g_opts[] = $chars[$i][0];
-			$g_opts[] = $chars[$i][1];
+			if ($group[$k] == " " || $group[$k] == "+" || array_search($k, $reps))
+			{
+				$half2t .= $group[$k];
+				$half2f .= $group[$k];
+			}
+			else if (ctype_alpha($group[$k]))
+			{
+				if ($ex == false && $overide == false)
+				{
+					$half2t .= $group[$k];
+					$half2f .= "!".$group[$k];
+				}
+				else
+				{
+					$half2t .= "!".$group[$k];
+					$half2f .= $group[$k];
+				}
+			}
 		}
+		else if ($group[$k] == "!")
+			$ex = true;
+		else if ($group[$k] == "(")
+		{
+			if ($ex == true)
+				$overide = true;
+		}
+		else if ($group[$i] == ")")
+			$overide = false;
+		if ($ex == true && $group[$k] != "!")
+			$ex = false;
+		echo "Char: ".$group[$k]." Index: ".$k." half1t: ".$half1t." half1f: ".$half1f." half2t: ".$half2t." half2f: ".$half2f.PHP_EOL;
 	}
-	if ($verbose === true)
+	$opts[] = $half1t.$half2t;
+	$opts[] = $half1f.$half2f;
+	$opts[] = $half1t.$half2f;
+	$opts[] = $half1f.$half2t;
+/*
+	else if ($xor)
 	{
-		echo "END EXPANDER".PHP_EOL;
-		var_dump($g_opts);
+		$options[$opts_start_pos] = $half1t.$half2t;
+		$options[$opts_start_pos+1] = $half1t.$half2f;
+		$options[$opts_start_pos+2] = $half1f.$half2t;
+		$aaopts[$group_num] = [$opts_start_pos, $opts_start_pos+2, 3];
 	}
-	return($g_opts);
+*/
+	return $opts;
 }
 
-function replacer($group, $x_groups, $i, $j , $options, $rplcd, &$rplcd_opt_ind)
+function replacer($half, $x_groups, $j, $options, $aaopts)
 {
-	//Create Strings of all chars pre (rg_pre) and post (rg_post) group to replace (rg)
-	if ($verbose === true)
+	$aopts = $aaopts[$j];
+	$g_pos = $x_groups[$j];
+	$half_post = substr($half, $g_pos[1]+1);
+	$pos1 = strpos($half, $half_post, $g_pos[0]);
+	$half_pre = substr($half, 0, $g_pos[0]);
+	$rpl = substr($half, $g_pos[0], $g_pos[1] - $g_pos[0] +1);
+	echo "IN REPLACER".PHP_EOL."half:".$half.PHP_EOL."half_pre:".$half_pre."~".PHP_EOL."half_post:".$half_post."~".PHP_EOL."rpl:".$rpl."~".PHP_EOL;
+	var_dump($g_pos);
+	$opts_ind_start = $aopts[0];
+	$opts_ind_end = $aopts[1];
+	$opts_ind_len = $aopts[2];
+	var_dump($aopts);
+	foreach ($options as $i => $opt)
 	{
-		echo "In REPLACER".PHP_EOL."group:";
-		var_dump($group);
-	}
-	if ($rplcd != false)
-	{
-		$rg_diff = $group[1];
-		$rg_pos = [$group[2][0]-$rg_diff, $group[2][1]-$rg_diff];
-		$rg_len = $rg_pos[1] - $rg_pos[0] + 1;
-		$rg_post = substr($group[0], $rg_pos[1]+1, iconv_strlen($group[0])-($rg_pos[1]+1));
-		$rg_pre = substr($group[0], 0, $rg_pos[0]);
-		$replace = substr($group[0], $rg_pos[0], $rg_len);
-		$rg_check = $group[2];
-	}
-	else
-	{
-		$rg_pos = $x_groups[$j];
-		$rg_len = $rg_pos[1] - $rg_pos[0] + 1;
-		$rg_post = substr($group, $rg_pos[1]+1, iconv_strlen($group)-($rg_pos[1]+1));
-		$rg_pre = substr($group, 0, $rg_pos[0]);
-		$replace = substr($group, $rg_pos[0], $rg_len);
-		$rg_check = $rg_pos;
-	}
-	if ($verbose === true) {echo "rg_pre:".$rg_pre."~".PHP_EOL."rg_post:".$rg_post."~".PHP_EOL."rpl:".$replace."~".PHP_EOL;}
-	foreach ($options as $k => $opt)
-	{
-		//Check if each option originated from the group to be replaced
-		if ($verbose === true) {echo "checking option i= ".$k.": ".$opt[0].PHP_EOL;}
-		if ($opt[1] == $rg_check)
+		echo "checking option: ".$opt.PHP_EOL;
+		if ($aaopts[$i] = $aopts)
 		{
-			$opt_len = iconv_strlen($opt[0]);
-			$diff = $rg_len - $opt_len;
-			if ($verbose === true)
+			$rplcd_gs[] = $half_pre.$opt.$half_post;
+			$pos2 = strpos($half, $half_post, $g_pos[0]);
+			$diff = $pos2 - $pos1;
+			foreach ($x_groups as $g_pos)
 			{
-				echo "replacing opt[1][0]=".$opt[1][0]." rg_pos[0]=".$rg_pos[0].PHP_EOL.$rg_pre.$opt[0].$rg_post.PHP_EOL;
-				echo "Diff Calculated: ".$diff.PHP_EOL;
+				$g_pos[0] = $g_pos[0] - $diff;
 			}
-			$rplcd_gs[] = [$rg_pre.$opt[0].$rg_post, $diff];
-			$rplcd_opt_ind[] = $k;
+		}
+		else if (strpos($opt, $rpl) != false)
+		{
+
 		}
 	}
-	if ($verbose === true)
+	for ($i = $opts_ind_start; $i <= $opts_ind_end; $i++)
 	{
-		var_dump($rplcd_gs);
-		echo "End REPLACER".PHP_EOL;
+		unset($options[$i]);
+		if ($options)
+			$options = array_values($options);
 	}
+	unset($aopts);
+	echo "ABODEMANTPOJD$O#YGECOUYV".PHP_EOL;
+	var_dump($rplcd_gs);
 	return $rplcd_gs;
 }
 
-function joiner($rule, $pre, $x_groups)
+function joiner($posibilities, $str, $pre, $p_groups, $con, $c_groups)
 {
-	if ($verbose === true)
+	echo "IN JOINER".PHP_EOL;
+	echo "str: ".$str.PHP_EOL."pre: ".$pre.PHP_EOL;
+	foreach ($p_groups as $i => $group_ind)
 	{
-		echo "IN JOINER".PHP_EOL."rule: ".$rule.PHP_EOL."pre: ".$pre.PHP_EOL;
-		var_dump($x_groups);
-	}
-	foreach ($x_groups as $i => $group_ind)
-	{
-		//Get group len and create group
-		$group_len = $group_ind[1] - $group_ind[0] + 1;
-		$group = substr($rule, $group_ind[0], $group_len);
-		if ($verbose === true) {echo "Group ".$i." is :".$group.PHP_EOL;}
+		$offset = $group_ind[1] - $group_ind[0] + 1;
+		$group = substr($str, $group_ind[0], $offset);
+		echo "Group ".$i." is :".$group." aaopts:".PHP_EOL;
+		var_dump($aaopts);
 		$rplcd = false;
-		//Check if any pervious groups are within this one, if so, replace with replacer function
 		for ($j = 0; $j < $i; $j++)
 		{
-			if ($verbose === true) {echo "Cheking for inner groups j=".$j.PHP_EOL;}
-			if ($group_ind[0] <= $x_groups[$j][0] && $group_ind[1] >= $x_groups[$j][1])
+			echo "Cheking for inner groups j=".$j.PHP_EOL;
+			if ($group_ind[0] <= $p_groups[$j][0] && $group_ind[1] >= $p_groups[$j][1])
 			{
-				if ($verbose === true) {echo "Inner group found, replacing".PHP_EOL;}
-				//If a previous replacement has been done, send rplcd_gs to replacer in place of current group
-				if ($rplcd != false)
+				echo "Inner group found, replacing".PHP_EOL;
+				$rplcd_gs[] = replacer($pre, $p_groups ,$j , $options, $aaopts);
+				$aaopts = array_values($aaopts);
+				$rplcd[] = [$j, $p_groups[$j][0], $p_groups[$j][1]];
+				/*
+				foreach ($options as $opt)
 				{
-					if ($verbose === true) {echo "Replacment has been done on this group already".PHP_EOL;}
-					//unset old replacements
-					$old_rplcd_gs = $rplcd_gs;
-					unset($rplcd_gs);
-					unset($rplcd_gs2);
-					foreach ($old_rplcd_gs as $old_rplcd_grp)
-					{
-						if ($old_rplcd_grp[2] = $x_groups[$j])
-							$rplcd_gs3[] = replacer($old_rplcd_grp, $x_groups, $i, $j, $options, $rplcd, $rplcd_opt_ind);
-					}
-					foreach ($rplcd_gs3 as $rplcd_g3)
-					{
-						foreach ($rplcd_g3 as $rplcd_g4)
-							$rplcd_gs2[] = [$rplcd_g4[0], $rplcd_g4[1], $x_groups[$j]];
-					}
-					if ($verbose === true)
-					{
-						echo "After replacing old_rplcd_grp, rplcd_gs2 :".PHP_EOL;
-						var_dump($rplcd_gs2);
-					}
+					$rplcd_gs[] = replacer($opt, $pre, iconv_strlen($str), $p_groups ,$j , $options, $aopts);
 				}
-				//If no replacement has been done, replace current group
-				else
-				{
-					if ($verbose === true) {echo "No replacment has been done on this group".PHP_EOL;}
-					$rplcd_gs2 = replacer($group, $x_groups, $i, $j , $options, $rplcd, $rplcd_opt_ind);
-					$rplcd[] = true;
-				}
-				//add each returned option to rplcd_gs
-				foreach ($rplcd_gs2 as $rplcd_g2)
-					$rplcd_gs[] = [$rplcd_g2[0], $rplcd_g2[1], $x_groups[$j]];
+				$aaopts = array_values($aaopts);
+				$rplcd[] = [$j, $p_groups[$j][0], $p_groups[$j][1]];
+				*/
 			}
 		}
-		//If replacement was done on current group, expand every element in rplcd_gs & add to options array with group indexes
 		if ($rplcd != false)
 		{
-			if ($verbose === true)
-			{
-				echo "POST replacer rplcd_gs at i=".$i.":".PHP_EOL;
-				var_dump($rplcd_gs);
-			}
+			echo "POST replacer rplcd_gs at i=".$i.":".PHP_EOL;
+			var_dump($rplcd_gs);
 			foreach ($rplcd_gs as $k => $r_group)
 			{
-				$new_options = expander($options, $r_group[0], $i);
-				foreach ($new_options as $n_opt)
-					$options[] = [$n_opt, $x_groups[$i]];
+				$opts_start_pos = count($options);
+				$opts = expander($options, $r_group, $i, $rplcd);
+				foreach ($opts as $opt)
+					$options[] = $opt;
+				$opts_end_pos = count($options)-1;
+				$aaopts[] = [$opts_start_pos, $opts_end_pos, $opts_end_pos-$opts_start_pos+1];
 			}
 			unset($rplcd_gs);
 			$rplcd = false;
-			foreach ($rplcd_opt_ind as $ind)
-				unset($options[$ind]);
-			array_values($options);
-			unset($rplcd_opt_ind);
 		}
-		//If no replacement was done on current group, expand group & add to options array with group indexes
 		else
 		{
-			if ($verbose === true) {echo "No replacements made for group ".$group.PHP_EOL;}
-			$new_options = expander($options, $group, $i);
-			foreach ($new_options as $n_opt)
-				$options[] = [$n_opt, $x_groups[$j]];
+			echo "No replacements made for group ".$group.PHP_EOL;
+			if ($options)
+				$opts_start_pos = count($options);
+			else
+				$opts_start_pos = 0;
+			$opts = expander($options, $group, $i, false);
+			var_dump($opts);
+			foreach ($opts as $opt)
+				$options[] = $opt;
+			$opts_end_pos = count($options)-1;
+			echo "opts_start_pos=".$opts_start_pos." opts_end_pos=".$opts_end_pos.PHP_EOL;
+			$aaopts[] = [$opts_start_pos, $opts_end_pos, $opts_end_pos-$opts_start_pos+1];
 		}
-		if ($verbose === true)
-		{
-			echo "at the end of JOINER iteration ".$i." options has:".PHP_EOL;
-			var_dump($options);
-		}
+		echo "at the end of iteration ".$i." options has:".PHP_EOL;
+		var_dump($options);
 	}
-	return $options;
 }
 
 function expand_posibls($pos)
 {
-	foreach ($pos as $i => $rule)
+	foreach ($pos as $e)
 	{
-		$iaoi = false;
-		if  (strpos($rule, '<') !== false)	//IFaoIF
+		if  (strpos($e, '<') !== false)	//IFaoIF
 		{
-			$pre_end = strpos($rule, '<')-2;
-			$con_start = strpos($rule, '>')+3;
-			$iaoi = true;
+			$pre_end = strpos($e, '<')-2;
+			$con_start = strpos($e, '>')+3;
 		}
 		else
 		{
-			$pre_end = strpos($rule, '=')-1;
-			$con_start = strpos($rule, '=')+3;
+			$pre_end = strpos($e, '=')-2;
+			$con_start = strpos($e, '=')+3;
 		}
 		echo "Pre: ".$pre_end.PHP_EOL."Con: ".$con_start.PHP_EOL;
-		$preStr = substr($rule, 0, $pre_end);
-		$conStr = substr($rule, $con_start, iconv_strlen($rule));
-		echo "Pre: ".$preStr.PHP_EOL."Con: ".$conStr.PHP_EOL;
-		$p_groups = grouper(trim($preStr));
-		$c_groups = grouper(trim($conStr));
-		/*echo "Pre Groups".PHP_EOL;
-		var_dump($p_groups);
+		$pre = substr($e, 0, $pre_end);
+		$con = substr($e, $con_start, iconv_strlen($e));
+		echo "Pre: ".$pre.PHP_EOL."Con: ".$con.PHP_EOL;
+		$p_groups = grouper(trim($pre));
+		$c_groups = grouper(trim($con));
+		echo "Pre Groups".PHP_EOL;
+		var_dump($p_goups);
 		echo "Con Groups".PHP_EOL;
-		var_dump($c_groups);*/
-		$pre = joiner($rule, $preStr, $p_groups);
-		echo "herehello".PHP_EOL;
-		echo $conStr.PHP_EOL;
-		if (iconv_strlen($conStr) == 1)
-			$con[] = $conStr;
-		else
-			$con = joiner($rule, $conStr, $c_groups);
-		var_dump($con);
-		if ($iaoi)
-		{
-			foreach ($con as $c)
-			{
-				foreach ($pre as $p)
-					$posibilities[] = [$p[0]." <=> ".$c[0], $i];
-			}
-		}
-		else
-		{
-			foreach ($con as $c)
-			{
-				foreach ($pre as $p)
-					$posibilities[] = [$p[0]." => ".$c[0], $i];
-			}
-		}
-		unset($con);
-		echo "At the end of expand_posibls iteration $i, posibilities is:".PHP_EOL;
-		var_dump($posibilities);
+		var_dump($c_goups);
+		$posibilities = joiner($posibilities, $e, $pre, $p_groups, $con, $c_groups);
 	}
-	return $posibilities;
 }
 
 if (file_exists($argv[1]))
@@ -780,7 +744,6 @@ foreach ($lines as $e)
 
 //$rules = expand_rules($pre_rules);
 $posibilities = expand_posibls($pre_posibls);
-echo "EEEEEEEEEENNNNNNNNNNDDDDDDDDDD".PHP_EOL;
 //echo "Pre Rules".PHP_EOL;
 //var_dump($pre_rules);
 //echo "Rules".PHP_EOL;

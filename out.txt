@@ -1,0 +1,6 @@
+Error reading file: 
+
+Warning: Invalid argument supplied for foreach() in C:\PHP\Ex\reader.php on line 756
+
+Warning: Invalid argument supplied for foreach() in C:\PHP\Ex\reader.php on line 683
+EEEEEEEEEENNNNNNNNNNDDDDDDDDDD
