@@ -108,6 +108,7 @@ function expand_rules($rls)
 				$rule = br_solver($rule, $br_pos);
 			$a = substr($rule, 0, strpos($rule, '<') - 1) . " => " . substr($rule, strpos($rule, '>') + 2, iconv_strlen($rule));
 			$b = substr($rule, strpos($rule, '>') + 2, iconv_strlen($rule)) . " => " . substr($rule, 0, strpos($rule, '<') - 1);
+
 			if ($rules)
 			{
 				if (in_array($a, $rules) === false)
@@ -664,16 +665,17 @@ function joiner($rule, $pre, $x_groups)
 		//If no replacement was done on current group, expand group & add to options array with group indexes
 		else
 		{
-			if ($verbose === true) {echo "No replacements made for group ".$group.PHP_EOL;}
+			if ($verbose === true) 
+				echo "No replacements made for group ".$group.PHP_EOL;
 			$new_options = expander($options, $group, $i);
 			foreach ($new_options as $n_opt)
 				$options[] = [$n_opt, $x_groups[$j]];
-		}
-		if ($verbose === true)
-		{
+			if ($verbose === true)
+			{
 			echo "at the end of JOINER iteration ".$i." options has:".PHP_EOL;
 			var_dump($options);
-		}
+			}
+		}	
 	}
 	return $options;
 }
@@ -778,13 +780,13 @@ foreach ($lines as $e)
 		echo "Comment: " . $e . PHP_EOL;
 }
 
-//$rules = expand_rules($pre_rules);
+$rules = expand_rules($pre_rules);
 $posibilities = expand_posibls($pre_posibls);
 echo "EEEEEEEEEENNNNNNNNNNDDDDDDDDDD".PHP_EOL;
-//echo "Pre Rules".PHP_EOL;
-//var_dump($pre_rules);
-//echo "Rules".PHP_EOL;
-//var_dump($rules);
-//var_dump($pre_posibls);
-//echo "\nFacts: ".$facts.PHP_EOL."Queries: ".$queries.PHP_EOL;
+echo "Pre Rules".PHP_EOL;
+var_dump($pre_rules);
+echo "Rules".PHP_EOL;
+var_dump($rules);
+var_dump($pre_posibls);
+echo "\nFacts: ".$facts.PHP_EOL."Queries: ".$queries.PHP_EOL;
 ?>
